@@ -1,5 +1,6 @@
 package com.sadman.School_management.config;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,13 +11,13 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class ProjectSecurityConfig {
-
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-
-        http.csrf().ignoringRequestMatchers("/saveMsg").and()
+        http.csrf().ignoringRequestMatchers("/saveMsg").ignoringRequestMatchers(PathRequest.toH2Console()).and()
                 .authorizeHttpRequests()
                 .requestMatchers("/dashboard").authenticated()
+                .requestMatchers("/displayMessages").hasRole("ADMIN")
+                .requestMatchers("/closeMsg/**").hasRole("ADMIN")
                 .requestMatchers("/home").permitAll()
                 .requestMatchers("/holidays/**").permitAll()
                 .requestMatchers("/contact").permitAll()
@@ -26,25 +27,30 @@ public class ProjectSecurityConfig {
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/logout").permitAll()
                 .requestMatchers("/assets/**").permitAll()
+                .requestMatchers(PathRequest.toH2Console()).permitAll()
                 .and().formLogin().loginPage("/login")
                 .defaultSuccessUrl("/dashboard").failureUrl("/login?error=true").permitAll()
                 .and().logout().logoutSuccessUrl("/login?logout=true").invalidateHttpSession(true).permitAll()
                 .and().httpBasic();
 
+        http.headers().frameOptions().disable();
+
         return http.build();
+
     }
 
     @Bean
-    public InMemoryUserDetailsManager userDetailsManager(){
-        UserDetails user = User.withDefaultPasswordEncoder()
+    public InMemoryUserDetailsManager userDetailsService() {
+
+        UserDetails admin = User.withDefaultPasswordEncoder()
                 .username("user")
                 .password("12345")
                 .roles("USER")
                 .build();
-        UserDetails admin = User.withDefaultPasswordEncoder()
+        UserDetails user = User.withDefaultPasswordEncoder()
                 .username("admin")
                 .password("54321")
-                .roles("USER", "ADMIN")
+                .roles("ADMIN")
                 .build();
         return new InMemoryUserDetailsManager(user, admin);
     }
