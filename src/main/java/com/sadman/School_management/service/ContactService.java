@@ -6,8 +6,6 @@ import com.sadman.School_management.repository.ContactRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +19,6 @@ public class ContactService {
     public boolean saveMessageDetails(Contact contact){
         boolean isSaved = false;
         contact.setStatus(AllConstants.OPEN);
-        contact.setCreatedBy(contact.getName());
-        contact.setCreatedAt(LocalDateTime.now());
         Contact savedContact = contactRepository.save(contact);
         if (savedContact != null && savedContact.getContactId() > 0){
             isSaved = true;
@@ -35,13 +31,11 @@ public class ContactService {
         return contactMsgs;
     }
 
-    public boolean updateMsgStatus(int id, String name){
+    public boolean updateMsgStatus(int id){
         boolean isUpdated = false;
         Optional<Contact> contact = contactRepository.findById(id);
         contact.ifPresent(contact1 -> {
             contact1.setStatus(AllConstants.CLOSE);
-            contact1.setUpdatedBy(name);
-            contact1.setUpdatedAt(LocalDateTime.now());
         });
         Contact updatedContact = contactRepository.save(contact.get());
         if (updatedContact != null && updatedContact.getUpdatedBy() != null){
