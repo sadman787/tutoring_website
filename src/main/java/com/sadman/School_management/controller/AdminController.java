@@ -1,7 +1,9 @@
 package com.sadman.school_management.controller;
 
+import com.sadman.school_management.model.Courses;
 import com.sadman.school_management.model.SchoolClass;
 import com.sadman.school_management.model.Person;
+import com.sadman.school_management.repository.CoursesRepository;
 import com.sadman.school_management.repository.SchoolClassRepository;
 import com.sadman.school_management.repository.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,9 @@ public class AdminController {
 
     @Autowired
     PersonRepository personRepository;
+
+    @Autowired
+    CoursesRepository coursesRepository;
 
     @RequestMapping("/displayClasses")
     public ModelAndView displayClasses(Model model) {
@@ -97,6 +102,39 @@ public class AdminController {
         SchoolClass schoolClassSaved = schoolClassRepository.save(schoolClass);
         session.setAttribute("schoolClass",schoolClassSaved);
         ModelAndView modelAndView = new ModelAndView("redirect:/admin/displayStudents?classId="+schoolClass.getClassId());
+        return modelAndView;
+    }
+
+    @GetMapping("/displayCourses")
+    public ModelAndView displayCourses(Model model) {
+        List<Courses> courses = coursesRepository.findAll();
+        ModelAndView modelAndView = new ModelAndView("courses_secure.html");
+        modelAndView.addObject("courses",courses);
+        modelAndView.addObject("course", new Courses());
+        return modelAndView;
+    }
+
+    @PostMapping("/addNewCourse")
+    public ModelAndView addNewCourse(Model model, @ModelAttribute("course") Courses course) {
+        ModelAndView modelAndView = new ModelAndView();
+        coursesRepository.save(course);
+        modelAndView.setViewName("redirect:/admin/displayCourses");
+        return modelAndView;
+    }
+
+    @GetMapping("/viewStudents")
+    public ModelAndView viewStudents(Model model, @RequestParam int id
+            ,HttpSession session,@RequestParam(required = false) String error) {
+        String errorMessage = null;
+        ModelAndView modelAndView = new ModelAndView("course_students.html");
+        Optional<Courses> courses = coursesRepository.findById(id);
+        modelAndView.addObject("courses",courses.get());
+        modelAndView.addObject("person",new Person());
+        session.setAttribute("courses",courses.get());
+        if(error != null) {
+            errorMessage = "Invalid Email entered!!";
+            modelAndView.addObject("errorMessage", errorMessage);
+        }
         return modelAndView;
     }
 }
