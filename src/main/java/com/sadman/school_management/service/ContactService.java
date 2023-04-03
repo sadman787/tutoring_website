@@ -51,4 +51,13 @@ public class ContactService {
         }
         return isUpdated;
     }
+
+//    public boolean updateMsgStatus(int id){
+//        boolean isUpdated = false;
+//        int rows = contactRepository.updateStatusById(AllConstants.CLOSE, id);
+//        if (rows > 0){
+//            isUpdated = true;
+//        }
+//        return isUpdated;
+//    }
 }
