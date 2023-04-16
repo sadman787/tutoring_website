@@ -69,7 +69,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<img src="images/Website screenshot.png" alt="Logo" width="200" height="100">
+<img src="images/Website screenshot.png" alt="Logo" width="434" height="220">
 
 [![Product Name Screen Shot][product-screenshot]](https://github.com/sadman787/tutoring_website/blob/develop/New%20Screenshot.png)
 
