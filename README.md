@@ -99,24 +99,24 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* Download IntelliJ IDEA from [https://www.jetbrains.com/idea/download/](https://www.jetbrains.com/idea/download/)
+* Download an IDE such as IntelliJ IDEA from [https://www.jetbrains.com/idea/download/](https://www.jetbrains.com/idea/download/)
 
 ### Installation
 
-1. Install IntelliJ IDEA
-2. Clone the repo
+1. Clone the repo
    ```sh
    git clone https://github.com/sadman787/tutoring_website.git
    ```
-3. Create a MySQL database and add credentials in application.properties
+2. Create a MySQL database (https://dev.mysql.com/doc/refman/8.0/en/creating-database.html)
+3. Create tables by running src/main/resources/schema.sql
+4. Add database redentials in application.properties
    ```sh
    spring.datasource.url=""
    spring.datasource.username=""
    spring.datasource.password=""
    ```
-4. Build and run the project
-5. Access the website at http://localhost:8080/
+5. Build and run the project
+6. Access the website at http://localhost:8080/
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
